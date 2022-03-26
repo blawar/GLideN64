@@ -36,6 +36,9 @@ TexrectDrawer::TexrectDrawer()
 
 void TexrectDrawer::init()
 {
+	if (!gfxContext)
+		return;
+
 	const FramebufferTextureFormats & fbTexFormats = gfxContext.getFramebufferTextureFormats();
 
 	m_FBO = gfxContext.createFramebuffer();
@@ -49,7 +52,7 @@ void TexrectDrawer::init()
 	m_pTexture->maskT = 0;
 	m_pTexture->mirrorS = 0;
 	m_pTexture->mirrorT = 0;
-	m_pTexture->width = 640;
+	m_pTexture->width  = 640;
 	m_pTexture->height = 580;
 	m_pTexture->textureBytes = m_pTexture->width * m_pTexture->height * fbTexFormats.colorFormatBytes;
 

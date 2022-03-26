@@ -49,7 +49,7 @@ bool WindowsWGL::start()
 	if ((SetPixelFormat(hDC, pixelFormat, &pfd)) == FALSE) {
         auto err = GetLastError();
         auto currentFormat = GetPixelFormat(hDC);
-		MessageBoxW(hWnd, L"Error while setting pixel format!", pluginNameW, MB_ICONERROR | MB_OK);
+		//MessageBoxW(hWnd, L"Error while setting pixel format!", pluginNameW, MB_ICONERROR | MB_OK);
 	}
 
 	if ((hRC = wglCreateContext(hDC)) == NULL) {

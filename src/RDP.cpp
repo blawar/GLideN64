@@ -313,9 +313,10 @@ void _TexRect( const Gwords words, bool flip )
 		return;
 	RDP.w0 = words.w0;
 	RDP.w1 = words.w1;
-	const s32 ulx = SIGN12(_SHIFTR(words.w1, 12, 12));
+	const u32 rawScalerValue = _SHIFTR(words.w1, 27, 5);
+	const s32 ulx = SIGN12(_SHIFTR(words.w1, 12, 12)) << rawScalerValue;
 	const s32 uly = _SHIFTR(words.w1, 0, 12);
-	const s32 lrx = SIGN12(_SHIFTR(words.w0, 12, 12));
+	const s32 lrx = SIGN12(_SHIFTR(words.w0, 12, 12)) << rawScalerValue;
 	const s32 lry = _SHIFTR(words.w0, 0, 12);
 	if (lrx < ulx || lry < uly)
 		return;

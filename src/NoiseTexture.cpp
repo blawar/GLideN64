@@ -106,6 +106,8 @@ void NoiseTexture::_fillTextureData()
 
 void NoiseTexture::init()
 {
+	if (!gfxContext)
+		return;
 	if (m_texData[0].empty())
 		_fillTextureData();
 

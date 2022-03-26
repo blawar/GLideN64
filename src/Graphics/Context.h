@@ -292,6 +292,8 @@ namespace graphics {
 
 		bool isFramebufferError() const;
 
+		operator bool () const { return m_impl.get(); }
+
 		static bool Multisampling;
 		static bool BlitFramebuffer;
 		static bool WeakBlitFramebuffer;

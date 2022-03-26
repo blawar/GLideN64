@@ -78,6 +78,7 @@ TxDbg::~TxDbg()
 void
 TxDbg::output(const int level, const wchar_t *format, ...)
 {
+#if 0
 	if (level > _level)
 		return;
 
@@ -90,5 +91,6 @@ TxDbg::output(const int level, const wchar_t *format, ...)
 	vfwprintf(_dbgfile, newformat, args);
 	fflush(_dbgfile);
 	va_end(args);
+#endif
 }
 #endif // OS_ANDROID

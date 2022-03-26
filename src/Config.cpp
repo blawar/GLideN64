@@ -62,7 +62,9 @@ void Config::resetToDefaults()
 	generalEmulation.enableFragmentDepthWrite = 1;
 #endif
 
-	graphics2D.correctTexrectCoords = tcDisable;
+	//Fix the texture coordinates when two 2D rectangles are next to each other
+	//The game creates a gap of half a pixel
+	graphics2D.correctTexrectCoords = tcSmart;
 	graphics2D.enableNativeResTexrects = NativeResTexrectsMode::ntDisable;
 	graphics2D.bgMode = BGMode::bgStripped;
 	graphics2D.enableTexCoordBounds = 0;
@@ -106,7 +108,7 @@ void Config::resetToDefaults()
 	textureFilter.txFilterIgnoreBG = 0;
 	textureFilter.txCacheSize = 100 * gc_uMegabyte;
 
-	textureFilter.txHiresEnable = 0;
+	textureFilter.txHiresEnable = 1;
 	textureFilter.txHiresFullAlphaChannel = 1;
 	textureFilter.txHresAltCRC = 0;
 
@@ -215,6 +217,8 @@ const char* Config::hotkeyIniName(u32 _idx)
 		return "hkOsdRenderingResolution";
 	case Config::HotKey::hkForceGammaCorrection:
 		return "hkForceGammaCorrection";
+	case Config::HotKey::hkInaccurateTexCords:
+		return "hkInaccurateTexCords";
 	}
 	return nullptr;
 }
@@ -251,6 +255,8 @@ const char* Config::enabledHotkeyIniName(u32 _idx)
 		return "hkOsdRenderingResolutionEnabled";
 	case Config::HotKey::hkForceGammaCorrection:
 		return "hkForceGammaCorrectionEnabled";
+	case Config::HotKey::hkInaccurateTexCords:
+		return "hkInaccurateTexCordsEnabled";
 	}
 	return nullptr;
 }

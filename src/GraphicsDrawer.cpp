@@ -1227,7 +1227,7 @@ void GraphicsDrawer::drawTexturedRect(const TexturedRectParams & _params)
 			return;
 		}
 
-		if (!_canDraw())
+		if (_params.texrectCmd && !_canDraw())
 			return;
 	}
 

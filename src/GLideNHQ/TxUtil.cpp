@@ -38,6 +38,11 @@
 #include <malloc.h>
 #endif
 
+#define SWAP32(data)   \
+( (((data) >> 24) & 0x000000FF) | (((data) >>  8) & 0x0000FF00) | \
+  (((data) <<  8) & 0x00FF0000) | (((data) << 24) & 0xFF000000) ) 
+
+
 /*
  * Utilities
  ******************************************************************************/
@@ -140,6 +145,7 @@ TxUtil::checksum64(uint8 *src, int width, int height, int size, int rowStride, u
  *          (unsigned short)(rdp.tiles[tile].format << 8 | rdp.tiles[tile].size),
  *          bpl);
  */
+
 uint32
 TxUtil::RiceCRC32(const uint8* src, int width, int height, int size, int rowStride)
 {
@@ -193,6 +199,11 @@ loop1:
 			while (x >= 0)
 			{
 				esi = *(uint32*)(src + x);
+				
+#ifdef NATIVE
+				esi = SWAP32(esi);
+#endif
+
 				esi ^= x;
 
 				crc32Ret = (crc32Ret << 4) + ((crc32Ret >> 28) & 15);
@@ -215,17 +226,18 @@ loop1:
 static
 uint8 CalculateMaxCI8b(const uint8* src, uint32 width, uint32 height, uint32 rowStride)
 {
-	uint8 val = 0;
+	uint8 max = 0;
+
 	for (uint32 y = 0; y < height; ++y) {
 		const uint8 * buf = src + rowStride * y;
-		for (uint32 x = 0; x<width; ++x) {
-			if (buf[x] > val)
-				val = buf[x];
-			if (val == 0xFF)
+		for (uint32 x = 0; x < width; ++x) {
+			if (buf[x] > max)
+				max = buf[x];
+			if (max == 0xFF)
 				return 0xFF;
 		}
 	}
-	return val;
+	return max;
 }
 
 static
@@ -236,7 +248,7 @@ uint8 CalculateMaxCI4b(const uint8* src, uint32 width, uint32 height, uint32 row
 	width >>= 1;
 	for (uint32 y = 0; y < height; ++y) {
 		const uint8 * buf = src + rowStride * y;
-		for (uint32 x = 0; x<width; ++x) {
+		for (uint32 x = 0; x < width; ++x) {
 			val1 = buf[x] >> 4;
 			val2 = buf[x] & 0xF;
 			if (val1 > val) val = val1;

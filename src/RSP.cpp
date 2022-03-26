@@ -33,7 +33,11 @@ RSPInfo		RSP;
 static
 void _ProcessDList()
 {
+#ifdef NATIVE
+	for (int i = 0; !RSP.halt && i < 1000*1000*1000; ++i) {
+#else
 	while (!RSP.halt) {
+#endif
 #ifndef NATIVE
 		if ((RSP.PC[RSP.PCi] + sizeof(Gwords)) > RDRAMSize) {
 #ifdef DEBUG_DUMP

@@ -147,6 +147,7 @@ GBIInfo GBI;
 void GBI_Unknown( const Gwords words )
 {
 	DebugMsg(DEBUG_NORMAL, "UNKNOWN GBI COMMAND 0x%02X", _SHIFTR(words.w0, 24, 8));
+	LOG(LOG_ERROR, "UNKNOWN GBI COMMAND 0x%02X", _SHIFTR(words.w0, 24, 8));
 }
 
 void GBIInfo::init()

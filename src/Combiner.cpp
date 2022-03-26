@@ -300,8 +300,11 @@ void CombinerInfo::setCombine(u64 _mux )
 		m_pCurrent = iter->second;
 	} else {
 		m_pCurrent = Combiner_Compile(key);
-		m_pCurrent->update(true);
-		m_combiners[m_pCurrent->getKey()] = m_pCurrent;
+		if (m_pCurrent)
+		{
+			m_pCurrent->update(true);
+			m_combiners[m_pCurrent->getKey()] = m_pCurrent;
+		}
 	}
 	m_bChanged = true;
 }
