@@ -85,7 +85,20 @@ void Config::resetToDefaults()
 #else
 	frameBufferEmulation.fbInfoDisabled = 1;
 #endif
+
+#ifdef NATIVE
+	frameBufferEmulation.enableOverscan = 1;
+	config.frameBufferEmulation.overscanPAL.left    = 4;
+	config.frameBufferEmulation.overscanPAL.right   = 4;
+	config.frameBufferEmulation.overscanPAL.top     = 0;
+	config.frameBufferEmulation.overscanPAL.bottom  = 3;
+	config.frameBufferEmulation.overscanNTSC.left   = 4;
+	config.frameBufferEmulation.overscanNTSC.right  = 4;
+	config.frameBufferEmulation.overscanNTSC.top    = 0;
+	config.frameBufferEmulation.overscanNTSC.bottom = 3;
+#else
 	frameBufferEmulation.enableOverscan = 0;
+#endif
 
 	textureFilter.txFilterMode = 0;
 	textureFilter.txEnhancementMode = 0;
