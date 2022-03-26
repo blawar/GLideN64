@@ -175,6 +175,10 @@ extern "C" {
         g_width = newWidth;
     }
 
+    bool gfx_force_43_enabled() {
+        return config.frameBufferEmulation.aspect == 1;
+    }
+
     void gfx_set_overscan(int left, int top, int right, int bottom) {
         config.frameBufferEmulation.enableOverscan      = 1;
         config.frameBufferEmulation.overscanPAL.left    = left;
