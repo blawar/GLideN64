@@ -87,7 +87,11 @@ void VI_UpdateSize()
 //	const int fsaa = ((*REG.VI_STATUS) >> 8) & 3;
 //	const int divot = ((*REG.VI_STATUS) >> 4) & 1;
 	FrameBufferList & fbList = frameBufferList();
-	FrameBuffer * pBuffer = fbList.findBuffer(VI.lastOrigin & 0xffffff);
+#ifdef NATIVE
+	FrameBuffer* pBuffer = fbList.findBuffer(VI.lastOrigin);
+#else
+	FrameBuffer* pBuffer = fbList.findBuffer(VI.lastOrigin & 0xffffff);
+#endif
 	DepthBuffer * pDepthBuffer = pBuffer != nullptr ? pBuffer->m_pDepthBuffer : nullptr;
 	if (config.frameBufferEmulation.enable &&
 		((interlacedPrev != VI.interlaced) ||
