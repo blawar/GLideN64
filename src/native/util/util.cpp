@@ -1,4 +1,5 @@
 #include "util.h"
+#ifdef _WIN32
 #include <windows.h>
 #include <memory>
 
@@ -55,3 +56,4 @@ std::wstring FormatStrW(const wchar_t * strFormat, ...)
 	return res;
 
 }
+#endif

@@ -1,12 +1,13 @@
 #include "osal_keys.h"
 
-#include <linux/limits.h>
-#include <linux/input.h>
+#include <limits.h>
 #include <dirent.h>
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ioctl.h>
+#include <linux/input.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -22,7 +22,11 @@
 #ifdef MUPENPLUSAPI
 #include <mupenplus/GLideN64_mupenplus.h>
 #else
+#if defined(OS_LINUX)
+#include <Graphics/OpenGLContext/linux/WindowsWGL.h>
+#else
 #include <Graphics/OpenGLContext/windows/WindowsWGL.h>
+#endif
 #endif
 
 namespace opengl {

@@ -15,7 +15,15 @@
 #include "osal_keys.h"
 
 #ifndef MUPENPLUSAPI
+#if defined(OS_LINUX)
+#define BOOL bool
+#define WORD unsigned int
+#undef CALL
+#define CALL
+#define HWND void*
+#else
 #include "windows/GLideN64_windows.h"
+#endif
 #endif
 
 Debugger g_debugger;

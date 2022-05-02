@@ -209,7 +209,11 @@ void initGLFunctions()
 #elif defined(ODROID)
 	void *gles2so = dlopen("/usr/lib/arm-linux-gnueabihf/libGLESv2.so", RTLD_NOW);
 #elif defined(VERO4K)
-       void *gles2so = dlopen("/opt/vero3/lib/libGLESv2.so", RTLD_NOW);
+	void *gles2so = dlopen("/opt/vero3/lib/libGLESv2.so", RTLD_NOW);
+#elif defined(__APPLE__)
+	void *libgl = dlopen("/System/Library/Frameworks/OpenGL.framework/OpenGL", RTLD_LAZY | RTLD_GLOBAL);
+#elif defined(OS_LINUX)
+	void *libgl = dlopen("libGL.so.1", RTLD_LAZY | RTLD_GLOBAL);
 #endif
 
 #if defined(EGL) || defined(OS_IOS)

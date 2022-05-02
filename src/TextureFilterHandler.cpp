@@ -94,21 +94,25 @@ void TextureFilterHandler::init()
 
 	wchar_t txCachePath[PLUGIN_PATH_SIZE + 16];
 	wchar_t * pTexCachePath = config.textureFilter.txCachePath;
+#if !defined(OS_LINUX)
 	if (::wcslen(config.textureFilter.txCachePath) == 0 ||
 		osal_is_absolute_path(config.textureFilter.txCachePath) == 0) {
 		api().GetUserCachePath(txCachePath);
 		gln_wcscat(txCachePath, wst("/cache"));
 		pTexCachePath = txCachePath;
 	}
+#endif
 
 	wchar_t txDumpPath[PLUGIN_PATH_SIZE + 16];
 	wchar_t * pTexDumpPath = config.textureFilter.txDumpPath;
+#if !defined(OS_LINUX)
 	if (::wcslen(config.textureFilter.txDumpPath) == 0 ||
 		osal_is_absolute_path(config.textureFilter.txDumpPath) == 0) {
 		api().GetUserCachePath(txDumpPath);
 		gln_wcscat(txDumpPath, wst("/texture_dump"));
 		pTexDumpPath = txDumpPath;
 	}
+#endif
 
 	m_inited = txfilter_init(maxTextureSize, // max texture width supported by hardware
 		maxTextureSize, // max texture height supported by hardware

@@ -7,7 +7,9 @@
 #endif
 #include "m64p_plugin.h"
 #else
+#if defined(OS_WINDOWS)
 #include "windows/GLideN64_windows.h"
+#endif
 #include "ZilmarGFX_1_3.h"
 #include "FrameBufferInfoAPI.h"
 //#define RSPTHREAD

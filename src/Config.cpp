@@ -122,12 +122,14 @@ void Config::resetToDefaults()
 
 	textureFilter.txHiresVramLimit = 0u;
 
+#ifndef OS_LINUX
 	api().GetUserDataPath(textureFilter.txPath);
 	gln_wcscat(textureFilter.txPath, wst("/hires_texture"));
 	api().GetUserCachePath(textureFilter.txCachePath);
 	gln_wcscat(textureFilter.txCachePath, wst("/cache"));
 	api().GetUserCachePath(textureFilter.txDumpPath);
 	gln_wcscat(textureFilter.txDumpPath, wst("/texture_dump"));
+#endif
 
 #ifdef OS_WINDOWS
 	font.name.assign("arial.ttf");
