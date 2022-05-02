@@ -1,7 +1,11 @@
 #pragma once
 
+#include <cstring>
 #ifndef _WIN32
-#include <strings.h>
+#define _stricmp strcasecmp
+#define stricmp strcasecmp
+#define sprintf_s snprintf
+#define _vscprintf(foo, ...) vsnprintf(NULL, 0, foo, __VA_ARGS__)
 #endif
 
 #include "FileClass.h"

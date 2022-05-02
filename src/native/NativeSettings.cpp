@@ -102,9 +102,15 @@ void _loadSettings(GlSettings & settings)
 	config.textureFilter.txSaveCache = settings.value("txSaveCache", config.textureFilter.txSaveCache).toInt();
 	config.textureFilter.txEnhancedTextureFileStorage = settings.value("txEnhancedTextureFileStorage", config.textureFilter.txEnhancedTextureFileStorage).toInt();
 	config.textureFilter.txHiresTextureFileStorage = settings.value("txHiresTextureFileStorage", config.textureFilter.txHiresTextureFileStorage).toInt();
+#ifndef OS_LINUX
 	wcscpy_s(config.textureFilter.txPath, ToUTF16(settings.value("txPath", FromUTF16(config.textureFilter.txPath).c_str()).toString().c_str()).c_str());
 	wcscpy_s(config.textureFilter.txCachePath, ToUTF16(settings.value("txCachePath", FromUTF16(config.textureFilter.txCachePath).c_str()).toString().c_str()).c_str());
 	wcscpy_s(config.textureFilter.txDumpPath, ToUTF16(settings.value("txDumpPath", FromUTF16(config.textureFilter.txDumpPath).c_str()).toString().c_str()).c_str());
+#else
+	wcscpy(config.textureFilter.txPath, L"");
+	wcscpy(config.textureFilter.txCachePath, L"");
+	wcscpy(config.textureFilter.txDumpPath, L"");
+#endif
 	settings.endGroup();
 
 	settings.beginGroup("font");
@@ -287,9 +293,15 @@ void writeSettings(const char * _strIniFolder)
 		settings.setValue("txSaveCache", config.textureFilter.txSaveCache);
 		settings.setValue("txEnhancedTextureFileStorage", config.textureFilter.txEnhancedTextureFileStorage);
 		settings.setValue("txHiresTextureFileStorage", config.textureFilter.txHiresTextureFileStorage);
+#ifndef OS_LINUX
 		settings.setValue("txPath", FromUTF16(config.textureFilter.txPath).c_str());
 		settings.setValue("txCachePath", FromUTF16(config.textureFilter.txCachePath).c_str());
 		settings.setValue("txDumpPath", FromUTF16(config.textureFilter.txDumpPath).c_str());
+#else
+		settings.setValue("txPath", "");
+		settings.setValue("txCachePath", "");
+		settings.setValue("txDumpPath", "");
+#endif
 		settings.endGroup();
 
 		settings.beginGroup("font");
@@ -325,7 +337,7 @@ static
 std::string _getRomName(const char * _strRomName)
 {
 	std::string RomName;
-
+#ifndef OS_LINUX
 	enum { CP_SHIFT_JIS = 932 };
 	int utf16size = MultiByteToWideChar(CP_SHIFT_JIS, MB_ERR_INVALID_CHARS, _strRomName, -1, 0, 0);
 	if (utf16size != 0)
@@ -355,6 +367,10 @@ std::string _getRomName(const char * _strRomName)
 		}
 	}
 	return RomName;
+#else
+	// fixme: linux port (MultiByteToWideChar)
+	return "THE LEGEND OF ZELDA";
+#endif
 }
 
 void loadCustomRomSettings(const char * _strIniFolder, const char * _strRomName)
@@ -402,13 +418,17 @@ void saveCustomRomSettings(const char * _strIniFolder, const char * _strRomName)
 	if (origConfig.G.S  != config.G.S || \
 		origConfig.G.S != settings.value(#S, config.G.S).toFloat()) \
 		settings.setValue(#S, config.G.S)
+
+#ifndef OS_LINUX
 #define WriteCustomSettingS(S) \
 	const std::string new##S = FromUTF16(config.textureFilter.S); \
 	const std::string orig##S = FromUTF16(origConfig.textureFilter.S); \
 	if (orig##S != new##S || \
 		orig##S != settings.value(#S, new##S.c_str()).toString()) \
 		settings.setValue(#S, new##S.c_str())
-
+#else
+#define WriteCustomSettingS(S)
+#endif
 	settings.beginGroup(romName.c_str());
 
 	settings.beginGroup("video");

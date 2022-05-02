@@ -3,11 +3,15 @@
 #include "Config.h"
 #include "../GLideNHQ/inc/png.h"
 
-void write_png_file(const wchar_t * file_name, int width, int height, const uint8_t *buffer)
+static void write_png_file(const char * file_name, int width, int height, const uint8_t *buffer)
 {
+#if defined(OS_WINDOWS)
 #pragma warning(disable: 4996)
-	FILE *fp = _wfopen(file_name, L"wb");
+	FILE *fp = fopen(file_name, "wb");
 #pragma warning(default: 4996)
+#else
+	FILE *fp = fopen((const char*)file_name, "wb");
+#endif
 	if (!fp) return;
 
 	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -76,15 +80,16 @@ void write_png_file(const wchar_t * file_name, int width, int height, const uint
 	fclose(fp);
 }
 
-void SaveScreenshot(const wchar_t * _folder, const char * _name, int _width, int _height, const unsigned char * _data)
+void SaveScreenshot(const char * _folder, const char * _name, int _width, int _height, const unsigned char * _data)
 {
-	const wchar_t * fileExt = L"png";
+#ifndef OS_LINUX
+	const char * fileExt = "png";
 
-	std::wstring folder = _folder;
+	std::string folder = _folder;
 	if (folder.size() > 1 && folder[folder.size() - 1] == L'\\') folder.resize(folder.size() - 1);
 
 	WIN32_FIND_DATA	FindData = { 0 };
-	HANDLE hFindFile = FindFirstFile(folder.c_str(), &FindData); // Find anything
+	HANDLE hFindFile = FindFirstFile(_folder, &FindData); // Find anything
 	if (hFindFile == INVALID_HANDLE_VALUE) {
 		::CreateDirectory(folder.c_str(), NULL);
 		hFindFile = FindFirstFile(folder.c_str(), &FindData);
@@ -95,19 +100,17 @@ void SaveScreenshot(const wchar_t * _folder, const char * _name, int _width, int
 	if ((FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 		return;
 
-	wchar_t wbuf[MAX_PATH];
-	mbstowcs(wbuf, _name, MAX_PATH);
-	std::wstring romName = std::wstring(wbuf);
+	std::string romName = std::string(_name);
 	for (size_t i = 0, n = romName.size(); i < n; i++) {
 		if (romName[i] == L' ') romName[i] = L'_';
 		if (romName[i] == L':') romName[i] = L';';
 	}
 
-	wchar_t fileName[MAX_PATH];
+	char fileName[MAX_PATH];
 	int i;
 	for (i = 0; i < 1000; ++i) {
 #pragma warning(disable: 4996)
-		swprintf(fileName, L"%ls\\GLideN64_%ls_%03i.%s", folder.c_str(), romName.c_str(), i, fileExt);
+		sprintf(fileName, "%ls\\GLideN64_%ls_%03i.%s", folder.c_str(), romName.c_str(), i, fileExt);
 #pragma warning(default: 4996)
 		hFindFile = FindFirstFile(fileName, &FindData);
 		if (hFindFile == INVALID_HANDLE_VALUE)
@@ -118,6 +121,17 @@ void SaveScreenshot(const wchar_t * _folder, const char * _name, int _width, int
 	}
 	if (i == 1000)
 		return;
-
 	write_png_file(fileName, _width, _height, _data);
+#else
+	const char * fileExt = "png";
+	char fileName[256];
+	int i= 0;
+	std::string romName = std::string(_name);
+	for (size_t i = 0, n = romName.size(); i < n; i++) {
+		if (romName[i] == L' ') romName[i] = L'_';
+		if (romName[i] == L':') romName[i] = L';';
+	}
+	snprintf(fileName, 256, "GLideN64_%ls_%03i.%s", romName.c_str(), i, fileExt);
+	write_png_file(fileName, _width, _height, _data);
+#endif
 }

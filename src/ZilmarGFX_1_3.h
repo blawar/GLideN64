@@ -19,6 +19,10 @@ the plugin
 #ifndef _GFX_H_INCLUDED__
 #define _GFX_H_INCLUDED__
 
+
+#ifdef OS_LINUX
+#include "Platform.h"
+#endif
 #ifndef word
 #include "porting.h"
 #endif

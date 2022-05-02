@@ -5,6 +5,9 @@
 #include <Windows.h>
 #else
 #include <unistd.h>
+#include <cstring>
+#include <cstdio>
+#include "util/path.h"
 #endif
 
 #if defined(_MSC_VER)

@@ -13,6 +13,13 @@
 extern "C" {
 #endif
 
+#ifndef _WIN32
+#ifndef PATH_MAX
+#define PATH_MAX 260
+#endif
+#endif
+
+
 static const unsigned char LINUX_HID_TO_NATIVE[256] = {
 	255, 255, 255, 255, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, 
 	KEY_F, KEY_G, KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, 
